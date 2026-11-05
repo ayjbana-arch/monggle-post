@@ -4,4 +4,5 @@
 
 - 그날 게시를 막으려면: 그 날짜 폴더에 `CANCEL` 파일 추가
 - 수동 게시: Actions → 인스타 게시 → Run workflow
-- 필요한 Secrets: `IG_ACCESS_TOKEN`, `REPO_ADMIN_TOKEN`
+- 바로 게시: `.publish-now` 에 날짜(YYYY-MM-DD)를 적어 push
+- 필요한 Secrets: `IG_ACCESS_TOKEN`

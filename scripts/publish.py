@@ -13,11 +13,12 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-API = os.environ.get("IG_API_BASE", "https://graph.instagram.com/v23.0")
+API = os.environ.get("IG_API_BASE", "https://graph.facebook.com/v23.0")
 TOKEN = os.environ["IG_ACCESS_TOKEN"]
 REPO = os.environ["GITHUB_REPOSITORY"]
 SHA = os.environ["GITHUB_SHA"]
 RAW = os.environ.get("RAW_BASE", "https://raw.githubusercontent.com")
+IG_USER_ID = os.environ["IG_USER_ID"]
 EXPECTED_USERNAME = os.environ.get("EXPECTED_USERNAME", "monggle_recipe")
 KST = datetime.timezone(datetime.timedelta(hours=9))
 IMAGES = ("1.jpg", "2.jpg", "3.jpg")
@@ -73,10 +74,10 @@ def main():
     if not caption or len(caption) > 2200:
         sys.exit(f"{date}: 캡션 길이 이상 ({len(caption)}자)")
 
-    me = call("GET", "me", {"fields": "user_id,username"})
+    ig_id = IG_USER_ID
+    me = call("GET", ig_id, {"fields": "username"})
     if me.get("username") != EXPECTED_USERNAME:
-        sys.exit(f"다른 계정의 토큰입니다: {me.get('username')}")
-    ig_id = me["user_id"]
+        sys.exit(f"다른 계정입니다: {me.get('username')}")
 
     # 마커를 못 남긴 채 재실행돼도 같은 글이 두 번 올라가지 않게 최근 게시물과 비교한다.
     recent = call("GET", f"{ig_id}/media", {"fields": "caption,permalink", "limit": 5})
