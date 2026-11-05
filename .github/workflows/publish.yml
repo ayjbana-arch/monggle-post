@@ -1,0 +1,41 @@
+name: 인스타 게시
+
+on:
+  schedule:
+    # 평일 12:07 KST. 깃허브 예약이 빠질 때를 대비해 13:07 KST 에 한 번 더 확인한다.
+    - cron: "7 3 * * 1-5"
+    - cron: "7 4 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      date:
+        description: "올릴 날짜 (YYYY-MM-DD). 비우면 오늘"
+        required: false
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: 게시
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          POST_DATE: ${{ inputs.date }}
+        run: python3 scripts/publish.py "$POST_DATE"
+      - name: 게시 기록 남기기
+        if: always()
+        run: |
+          git add posts/*/POSTED 2>/dev/null || true
+          git diff --cached --quiet && exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "게시 기록"
+          git pull --rebase
+          git push
