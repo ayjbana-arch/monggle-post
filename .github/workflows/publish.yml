@@ -29,16 +29,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: 게시
+        shell: bash
         env:
           IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
           IG_USER_ID: "17841423927716282"
           POST_DATE: ${{ inputs.date }}
         run: |
           if [ "$GITHUB_EVENT_NAME" = "push" ]; then POST_DATE=$(tr -d '[:space:]' < .publish-now); fi
-          python3 scripts/publish.py "$POST_DATE"
+          mkdir -p logs
+          python3 scripts/publish.py "$POST_DATE" 2>&1 | tee logs/last-run.txt
       - name: 게시 기록 남기기
         if: always()
         run: |
+          git add logs/last-run.txt 2>/dev/null || true
           git add posts/*/POSTED 2>/dev/null || true
           git diff --cached --quiet && exit 0
           git config user.name "github-actions[bot]"
