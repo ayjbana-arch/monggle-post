@@ -1,1 +1,1 @@
-인스타 API 오류 400 (17841423927716282): {"error":{"message":"API access blocked.","code":200,"type":"OAuthException","fbtrace_id":"A-vWCFR7LjjcfL5vdmzhtQq"}}
+인스타 API 오류 400 (17841423927716282): {"error":{"message":"API access blocked.","code":200,"type":"OAuthException","fbtrace_id":"AlbkVd3ePwdBzU6gGKtz3Er"}}
