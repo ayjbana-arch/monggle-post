@@ -1,1 +1,1 @@
-인스타 API 오류 400 (17841423927716282): {"error":{"message":"API access blocked.","code":200,"type":"OAuthException","fbtrace_id":"AlbkVd3ePwdBzU6gGKtz3Er"}}
+확인 성공: monggle_recipe 2026-11-07 16:59
