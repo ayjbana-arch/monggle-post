@@ -56,6 +56,11 @@ def wait_ready(container_id):
 def main():
     date = (sys.argv[1] if len(sys.argv) > 1 and sys.argv[1]
             else datetime.datetime.now(KST).strftime("%Y-%m-%d"))
+    if date == "check":
+        # 게시 없이 토큰과 계정 접근만 확인한다.
+        me = call("GET", IG_USER_ID, {"fields": "username"})
+        print(f"확인 성공: {me.get('username')} {datetime.datetime.now(KST):%Y-%m-%d %H:%M}")
+        return
     folder = pathlib.Path("posts") / date
     if not folder.is_dir():
         print(f"{date}: 게시물 폴더 없음, 종료")
