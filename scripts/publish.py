@@ -64,6 +64,10 @@ def main():
     folder = pathlib.Path("posts") / date
     if not folder.is_dir():
         print(f"{date}: 게시물 폴더 없음, 종료")
+        now = datetime.datetime.now(KST)
+        if os.environ.get("GITHUB_EVENT_NAME") == "schedule" and now.hour == 15:
+            # 오후 3시까지 준비가 안 됐으면 실패로 끝내 깃허브가 메일로 알리게 한다.
+            sys.exit(f"{date}: 오후 3시가 지나도록 오늘 게시물이 준비되지 않았어요.")
         return
     if (folder / "CANCEL").exists():
         print(f"{date}: CANCEL 있음, 게시 안 함")
